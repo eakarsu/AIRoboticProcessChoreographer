@@ -15,6 +15,7 @@ async function seed() {
 
   // Drop tables
   await pool.query(`
+    DROP TABLE IF EXISTS simulation_predictions CASCADE;
     DROP TABLE IF EXISTS ai_results CASCADE;
     DROP TABLE IF EXISTS shifts CASCADE;
     DROP TABLE IF EXISTS maintenance CASCADE;
@@ -134,8 +135,21 @@ async function seed() {
       feature VARCHAR(100) NOT NULL,
       input_summary TEXT,
       result TEXT,
+      result_json JSONB,
       model_used VARCHAR(255),
       tokens_used INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+
+    CREATE TABLE simulation_predictions (
+      id SERIAL PRIMARY KEY,
+      scenario TEXT,
+      duration VARCHAR(50),
+      robot_count INTEGER,
+      predicted_result TEXT,
+      actual_result TEXT,
+      comparison_notes TEXT,
+      period_end TIMESTAMP,
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);

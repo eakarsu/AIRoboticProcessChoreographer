@@ -22,6 +22,16 @@ const menuItems = [
   { path: '/ai/predictive-maintenance', label: 'Predictive Maint.', icon: '🔮' },
   { path: '/ai/demand-forecast', label: 'Demand Forecast', icon: '📈' },
   { path: '/ai/simulation', label: 'Simulation', icon: '🎮' },
+  { path: '/ai/auto-dispatch', label: 'Auto-Dispatcher', icon: '🚀' },
+  { path: '/ai/battery-optimization', label: 'Battery Optimization', icon: '🔋' },
+  { path: '/ai/zone-heat-map', label: 'Zone Heat Map', icon: '🔥' },
+  { path: '/ai/fault-diagnosis', label: 'Fault Diagnosis', icon: '🛠️' },
+  { path: '/ai/robot-health-dashboard', label: 'Robot Health', icon: '🩺' },
+  { path: '/ai/performance-benchmarking', label: 'Perf. Benchmarking', icon: '📊' },
+  { path: '/ai/dynamic-fleet-sizing', label: 'Fleet Sizing', icon: '📐' },
+  { path: '/ai/zone-capacity-forecast', label: 'Zone Capacity Forecast', icon: '📊' },
+  { path: '/ai/charging-orchestration', label: 'Charging Orchestration', icon: '⚡' },
+  { path: '/robots/oee', label: 'OEE Dashboard', icon: '📈' },
   { path: '/ai/history', label: 'AI History', icon: '📜' },
 ];
 

@@ -46,6 +46,11 @@ const featureInfo = {
       { key: 'robotCount', label: 'Robot Count', type: 'number', placeholder: 'e.g., 15' },
     ],
   },
+  'auto-dispatch': {
+    icon: '🚀',
+    description: 'AI automatically reads all pending tasks and available robots from the database, computes optimal assignments, and writes them directly to the tasks table. No manual input required.',
+    inputs: null,
+  },
 };
 
 function AIFeaturePage({ feature, title, showToast }) {
@@ -128,13 +133,48 @@ function AIFeaturePage({ feature, title, showToast }) {
             {result.usage && (
               <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#64748b' }}>
                 <span>Tokens: {result.usage.total_tokens?.toLocaleString()}</span>
-                <span>Model: {result.usage.model || 'claude-haiku'}</span>
+                <span>Model: claude-3-5-sonnet</span>
               </div>
             )}
           </div>
-          <div className="ai-content">
-            <ReactMarkdown>{result.result}</ReactMarkdown>
-          </div>
+
+          {/* Auto-dispatch structured result */}
+          {feature === 'auto-dispatch' && result.dispatched && (
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#22c55e' }}>{result.message}</div>
+                <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+                  {result.total_pending} pending tasks | {result.total_robots} available robots
+                </div>
+              </div>
+              {result.dispatched.length > 0 && (
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                  <thead>
+                    <tr style={{ background: '#1e293b' }}>
+                      <th style={{ padding: '8px 12px', textAlign: 'left', color: '#94a3b8' }}>Task ID</th>
+                      <th style={{ padding: '8px 12px', textAlign: 'left', color: '#94a3b8' }}>Robot ID</th>
+                      <th style={{ padding: '8px 12px', textAlign: 'left', color: '#94a3b8' }}>Reason</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.dispatched.map((d, i) => (
+                      <tr key={i} style={{ borderTop: '1px solid #334155' }}>
+                        <td style={{ padding: '8px 12px', color: '#e2e8f0' }}>#{d.task_id}</td>
+                        <td style={{ padding: '8px 12px', color: '#a5b4fc' }}>Robot #{d.robot_id}</td>
+                        <td style={{ padding: '8px 12px', color: '#94a3b8', fontSize: '12px' }}>{d.reason}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {result.result && (
+            <div className="ai-content">
+              <ReactMarkdown>{result.result}</ReactMarkdown>
+            </div>
+          )}
         </div>
       )}
     </div>
