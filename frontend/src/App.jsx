@@ -15,6 +15,7 @@ import DynamicFleetSizingPage from './pages/DynamicFleetSizingPage';
 import ZoneCapacityForecastPage from './pages/ZoneCapacityForecastPage';
 import ChargingOrchestrationPage from './pages/ChargingOrchestrationPage';
 import Sidebar from './components/Sidebar';
+import CustomViewsPage from './pages/CustomViewsPage';
 
 // === Batch 07 Gaps & Frontend Mounts ===
 import CfDynamicFleetSizeOptimization from './pages/CfDynamicFleetSizeOptimization';
@@ -110,6 +111,7 @@ function App() {
           <Route path="/ai/dynamic-fleet-sizing" element={<DynamicFleetSizingPage showToast={showToast} />} />
           <Route path="/ai/zone-capacity-forecast" element={<ZoneCapacityForecastPage showToast={showToast} />} />
           <Route path="/ai/charging-orchestration" element={<ChargingOrchestrationPage showToast={showToast} />} />
+          <Route path="/custom-views" element={<CustomViewsPage />} />
           // === Batch 07 Gaps & Frontend Mounts ===
           <Route path='/cf-dynamic-fleet-size-optimization' element={<CfDynamicFleetSizeOptimization />} />
           <Route path='/cf-predictive-collision-prevention' element={<CfPredictiveCollisionPrevention />} />

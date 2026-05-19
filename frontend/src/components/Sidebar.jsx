@@ -33,6 +33,9 @@ const menuItems = [
   { path: '/ai/charging-orchestration', label: 'Charging Orchestration', icon: '⚡' },
   { path: '/robots/oee', label: 'OEE Dashboard', icon: '📈' },
   { path: '/ai/history', label: 'AI History', icon: '📜' },
+
+  { type: 'header', label: 'RPA Views' },
+  { path: '/custom-views', label: 'RPA Views', icon: '🗂️' },
 ];
 
 function Sidebar({ user, onLogout }) {

@@ -42,6 +42,9 @@ app.use('/api/operators', require('./routes/operators'));
 app.use('/api/shifts', require('./routes/shifts'));
 app.use('/api/ai', require('./routes/ai'));
 
+// Custom Views (4 RPA-choreography features) — mounted BEFORE 404 handler
+app.use('/api/custom-views', require('./routes/customViews'));
+
 // Auto-migrate: add result_json column and simulation_predictions table if missing
 const pool = require('./db');
 pool.query(`ALTER TABLE ai_results ADD COLUMN IF NOT EXISTS result_json JSONB`).catch(() => {});
