@@ -36,6 +36,11 @@ import GapNoTelemetryIngestionEndpointSensorStrea from './pages/GapNoTelemetryIn
 import GapNoWmserpIntegrationSapManhattan from './pages/GapNoWmserpIntegrationSapManhattan';
 import GapNoNotificationsForCriticalFaults from './pages/GapNoNotificationsForCriticalFaults';
 import GapNoAuditLogForSafetyrelatedInterventions from './pages/GapNoAuditLogForSafetyrelatedInterventions';
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
+
 // === End Batch 07 ===
 
 
@@ -85,6 +90,10 @@ function App() {
       <Sidebar user={user} onLogout={handleLogout} />
       <main style={{ flex: 1, padding: '32px', marginLeft: '260px', minHeight: '100vh' }}>
         <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
           <Route path="/" element={<Dashboard />} />
           <Route path="/robots" element={<ResourcePage resource="robots" title="Robot Fleet" showToast={showToast} />} />
           <Route path="/zones" element={<ResourcePage resource="zones" title="Warehouse Zones" showToast={showToast} />} />
