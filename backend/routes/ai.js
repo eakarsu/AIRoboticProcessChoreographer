@@ -30,7 +30,8 @@ async function callOpenRouter(prompt, feature, extraInput = '') {
     err.code = 'NO_API_KEY';
     throw err;
   }
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  const baseUrl = (process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1').replace(/\/$/, '');
+  const response = await fetch(`${baseUrl}/chat/completions`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -50,8 +51,10 @@ async function callOpenRouter(prompt, feature, extraInput = '') {
     }),
   });
   const data = await response.json();
+  if (!response.ok) throw new Error(data.error?.message || `OpenRouter HTTP ${response.status}`);
   if (data.error) throw new Error(data.error.message || 'OpenRouter error');
-  const result = data.choices?.[0]?.message?.content || 'No response from AI';
+  const result = data.choices?.[0]?.message?.content;
+  if (!result || !String(result).trim()) throw new Error('OpenRouter returned an empty response');
   const resultJson = parseAIJson(result);
 
   // Persist AI result with result_json column
