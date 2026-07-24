@@ -10,6 +10,12 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
+function requireDemoPassword() {
+  const password = process.env.DEMO_PASSWORD || process.env.SEED_DEMO_PASSWORD || process.env.DEMO_SEED_PASSWORD || '';
+  if (password.length < 12 || password.length > 1024) throw new Error('DEMO_PASSWORD must contain 12-1024 characters');
+  return password;
+}
+
 async function seed() {
   console.log('🌱 Seeding database...');
 
@@ -155,7 +161,7 @@ async function seed() {
   `);
 
   // Seed users
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashedPassword = await bcrypt.hash(requireDemoPassword(), 10);
   await pool.query(
     `INSERT INTO users (email, password, name, role) VALUES ($1, $2, $3, $4)`,
     ['admin@robotchoreographer.com', hashedPassword, 'Admin User', 'admin']
@@ -345,7 +351,7 @@ async function seed() {
   console.log('✅ Shifts seeded (15)');
 
   console.log('\n🎉 Database seeded successfully!');
-  console.log('📧 Login: admin@robotchoreographer.com / admin123\n');
+  console.log('Demo login users provisioned from the local environment.');
   pool.end();
 }
 
