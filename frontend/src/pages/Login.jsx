@@ -69,7 +69,7 @@ function Login({ onLogin }) {
           </button>
 
           <button type="button" onClick={handleAutoFill} style={styles.autoFillBtn}>
-            Quick Login (Demo Credentials)
+            Auto Fill Demo Credentials
           </button>
         </form>
 
