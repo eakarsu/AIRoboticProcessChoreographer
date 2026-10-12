@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function ZoneHeatMapPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [windowHours, setWindowHours] = useState(24);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -21,7 +26,7 @@ function ZoneHeatMapPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="ZoneHeatMapPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header">
         <h1>AI Zone Heat Map</h1>
       </div>
@@ -40,7 +45,7 @@ function ZoneHeatMapPage({ showToast }) {
         <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
           <div className="form-group">
             <label style={styles.label}>Window (hours)</label>
-            <input type="number" min="1" max="168" value={windowHours} onChange={e => setWindowHours(e.target.value)} />
+            <input type="number" min="1" max="168" value={windowHours} onChange={e => setWindowHours(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: windowHours, change: e => setWindowHours(e.target.value), label: "windowHours", manual: false, json: false, sample: 24 }, "p1-1640", undefined)} />
           </div>
         </div>
 
@@ -91,7 +96,7 @@ function ZoneHeatMapPage({ showToast }) {
           )}
 
           {!result.result && !Array.isArray(result.zones) && (
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>
+            <FormattedAIReport response={result} />
           )}
         </div>
       )}

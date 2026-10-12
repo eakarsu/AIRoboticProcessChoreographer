@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function DynamicFleetSizingPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [horizonHours, setHorizonHours] = useState(24);
   const [expectedRate, setExpectedRate] = useState('');
   const [result, setResult] = useState(null);
@@ -30,7 +35,7 @@ function DynamicFleetSizingPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="DynamicFleetSizingPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header"><h1>AI Dynamic Fleet Sizing</h1></div>
       <div style={styles.infoCard}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
@@ -47,11 +52,11 @@ function DynamicFleetSizingPage({ showToast }) {
         <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
           <div>
             <label style={styles.label}>Horizon (hours)</label>
-            <input type="number" min="1" max="168" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} />
+            <input type="number" min="1" max="168" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: horizonHours, change: e => setHorizonHours(e.target.value), label: "horizonHours", manual: false, json: false, sample: 24 }, "p1-2127", undefined)} />
           </div>
           <div>
             <label style={styles.label}>Expected task rate / hour (optional)</label>
-            <input type="number" min="0" value={expectedRate} onChange={e => setExpectedRate(e.target.value)} placeholder="e.g., 60" />
+            <input type="number" min="0" value={expectedRate} onChange={e => setExpectedRate(e.target.value)} placeholder="e.g., 60" data-full-ai-field={fullAIExamples.bind({ current: expectedRate, change: e => setExpectedRate(e.target.value), label: "expectedRate", manual: false, json: false, sample: '' }, "p1-2368", undefined)} />
           </div>
         </div>
 
@@ -96,7 +101,7 @@ function DynamicFleetSizingPage({ showToast }) {
             </>
           )}
           {result.result && <div className="ai-content"><ReactMarkdown>{result.result}</ReactMarkdown></div>}
-          {!result.result && !result.result_json && <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>}
+          {!result.result && !result.result_json && <FormattedAIReport response={result} />}
         </div>
       )}
     </div>

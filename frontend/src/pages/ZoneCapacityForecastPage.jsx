@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function ZoneCapacityForecastPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [horizonHours, setHorizonHours] = useState(12);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +32,7 @@ function ZoneCapacityForecastPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="ZoneCapacityForecastPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header"><h1>AI Zone Capacity Forecast</h1></div>
       <div style={styles.infoCard}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
@@ -43,7 +48,7 @@ function ZoneCapacityForecastPage({ showToast }) {
 
         <div style={{ marginTop: 20 }}>
           <label style={styles.label}>Horizon (hours)</label>
-          <input type="number" min="1" max="72" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} />
+          <input type="number" min="1" max="72" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: horizonHours, change: e => setHorizonHours(e.target.value), label: "horizonHours", manual: false, json: false, sample: 12 }, "p1-1809", undefined)} />
         </div>
 
         <button className="btn btn-primary btn-lg" onClick={run} disabled={loading} style={{ marginTop: 20, width: '100%' }}>
@@ -77,7 +82,7 @@ function ZoneCapacityForecastPage({ showToast }) {
             </table>
           )}
           {result.result && <div className="ai-content"><ReactMarkdown>{result.result}</ReactMarkdown></div>}
-          {!result.result && !result.result_json && <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>}
+          {!result.result && !result.result_json && <FormattedAIReport response={result} />}
         </div>
       )}
     </div>

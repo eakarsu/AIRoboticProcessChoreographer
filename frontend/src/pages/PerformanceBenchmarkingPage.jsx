@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function PerformanceBenchmarkingPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [windowDays, setWindowDays] = useState(7);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +32,7 @@ function PerformanceBenchmarkingPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="PerformanceBenchmarkingPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header">
         <h1>AI Performance Benchmarking</h1>
       </div>
@@ -46,7 +51,7 @@ function PerformanceBenchmarkingPage({ showToast }) {
         <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
           <div className="form-group">
             <label style={styles.label}>Window (days)</label>
-            <input type="number" min="1" max="90" value={windowDays} onChange={e => setWindowDays(e.target.value)} />
+            <input type="number" min="1" max="90" value={windowDays} onChange={e => setWindowDays(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: windowDays, change: e => setWindowDays(e.target.value), label: "windowDays", manual: false, json: false, sample: 7 }, "p1-2015", undefined)} />
           </div>
         </div>
 
@@ -117,7 +122,7 @@ function PerformanceBenchmarkingPage({ showToast }) {
           )}
 
           {!result.result && !result.result_json && (
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>
+            <FormattedAIReport response={result} />
           )}
         </div>
       )}

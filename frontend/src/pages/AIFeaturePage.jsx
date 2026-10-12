@@ -1,3 +1,5 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
@@ -54,6 +56,8 @@ const featureInfo = {
 };
 
 function AIFeaturePage({ feature, title, showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({});
@@ -74,7 +78,7 @@ function AIFeaturePage({ feature, title, showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="AIFeaturePage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header">
         <h1>{title}</h1>
       </div>
@@ -100,7 +104,7 @@ function AIFeaturePage({ feature, title, showToast }) {
                   type={input.type}
                   placeholder={input.placeholder}
                   value={inputData[input.key] || ''}
-                  onChange={e => setInputData({ ...inputData, [input.key]: e.target.value })}
+                  onChange={e => setInputData({ ...inputData, [input.key]: e.target.value })} data-full-ai-field={fullAIExamples.bind({ current: inputData[input.key] || '', change: e => setInputData({ ...inputData, [input.key]: e.target.value }), label: "inputData[input.key]", manual: false, json: false }, "p1-4225", [(typeof input === 'object' ? input?.key ?? input?.name ?? input?.id ?? '' : input),input.key].join(":"))}
                 />
               </div>
             ))}

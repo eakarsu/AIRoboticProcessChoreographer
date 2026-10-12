@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function ChargingOrchestrationPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [minBattery, setMinBattery] = useState(25);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +32,7 @@ function ChargingOrchestrationPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="ChargingOrchestrationPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header"><h1>AI Charging Orchestration</h1></div>
       <div style={styles.infoCard}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
@@ -43,7 +48,7 @@ function ChargingOrchestrationPage({ showToast }) {
 
         <div style={{ marginTop: 20 }}>
           <label style={styles.label}>Critical battery threshold (%)</label>
-          <input type="number" min="5" max="50" value={minBattery} onChange={e => setMinBattery(e.target.value)} />
+          <input type="number" min="5" max="50" value={minBattery} onChange={e => setMinBattery(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: minBattery, change: e => setMinBattery(e.target.value), label: "minBattery", manual: false, json: false, sample: 25 }, "p1-1828", undefined)} />
         </div>
 
         <button className="btn btn-primary btn-lg" onClick={run} disabled={loading} style={{ marginTop: 20, width: '100%' }}>
@@ -102,7 +107,7 @@ function ChargingOrchestrationPage({ showToast }) {
             </>
           )}
           {result.result && <div className="ai-content"><ReactMarkdown>{result.result}</ReactMarkdown></div>}
-          {!result.result && !result.result_json && <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>}
+          {!result.result && !result.result_json && <FormattedAIReport response={result} />}
         </div>
       )}
     </div>

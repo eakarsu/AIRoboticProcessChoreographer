@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function FaultDiagnosisPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [robotId, setRobotId] = useState('');
   const [faultCode, setFaultCode] = useState('');
   const [symptoms, setSymptoms] = useState('');
@@ -37,7 +42,7 @@ function FaultDiagnosisPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="FaultDiagnosisPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header">
         <h1>AI Fault Diagnosis</h1>
       </div>
@@ -56,20 +61,20 @@ function FaultDiagnosisPage({ showToast }) {
         <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
           <div className="form-group">
             <label style={styles.label}>Robot ID</label>
-            <input type="number" value={robotId} onChange={e => setRobotId(e.target.value)} />
+            <input type="number" value={robotId} onChange={e => setRobotId(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: robotId, change: e => setRobotId(e.target.value), label: "robotId", manual: false, json: false, sample: '' }, "p1-2150", undefined)} />
           </div>
           <div className="form-group">
             <label style={styles.label}>Fault Code</label>
-            <input type="text" value={faultCode} onChange={e => setFaultCode(e.target.value)} placeholder="e.g. E-512" />
+            <input type="text" value={faultCode} onChange={e => setFaultCode(e.target.value)} placeholder="e.g. E-512" data-full-ai-field={fullAIExamples.bind({ current: faultCode, change: e => setFaultCode(e.target.value), label: "faultCode", manual: false, json: false, sample: '' }, "p1-2360", undefined)} />
           </div>
         </div>
         <div className="form-group" style={{ marginTop: 12 }}>
           <label style={styles.label}>Symptoms</label>
-          <textarea rows={4} value={symptoms} onChange={e => setSymptoms(e.target.value)} placeholder="What's the robot doing or not doing?" />
+          <textarea rows={4} value={symptoms} onChange={e => setSymptoms(e.target.value)} placeholder="What's the robot doing or not doing?" data-full-ai-field={fullAIExamples.bind({ current: symptoms, change: e => setSymptoms(e.target.value), label: "symptoms", manual: false, json: false, sample: '' }, "p1-2630", undefined)} />
         </div>
         <div className="form-group" style={{ marginTop: 12 }}>
           <label style={styles.label}>Recent Maintenance</label>
-          <textarea rows={3} value={recentMaintenance} onChange={e => setRecentMaintenance(e.target.value)} placeholder="Recent service, replaced parts, last calibration..." />
+          <textarea rows={3} value={recentMaintenance} onChange={e => setRecentMaintenance(e.target.value)} placeholder="Recent service, replaced parts, last calibration..." data-full-ai-field={fullAIExamples.bind({ current: recentMaintenance, change: e => setRecentMaintenance(e.target.value), label: "recentMaintenance", manual: false, json: false, sample: '' }, "p1-2917", undefined)} />
         </div>
 
         {error && <div style={{ color: '#fecaca', background: '#7f1d1d', padding: 10, borderRadius: 8, marginTop: 12 }}>{error}</div>}
@@ -115,7 +120,7 @@ function FaultDiagnosisPage({ showToast }) {
           )}
 
           {!result.result && !Array.isArray(result.causes) && (
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>
+            <FormattedAIReport response={result} />
           )}
         </div>
       )}

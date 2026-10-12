@@ -1,8 +1,13 @@
+
+import FullAIExamples, { useFullAIExamples } from "../components/FullAIExamples.jsx";
+import FormattedAIReport from "../components/FormattedAIReport";
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../api';
 
 function BatteryOptimizationPage({ showToast }) {
+  const fullAIExamples = useFullAIExamples();
+
   const [horizonHours, setHorizonHours] = useState(8);
   const [chargingStations, setChargingStations] = useState(4);
   const [result, setResult] = useState(null);
@@ -25,7 +30,7 @@ function BatteryOptimizationPage({ showToast }) {
   };
 
   return (
-    <div>
+    <div data-full-ai-workspace="BatteryOptimizationPage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
       <div className="page-header">
         <h1>AI Battery Optimization</h1>
       </div>
@@ -44,11 +49,11 @@ function BatteryOptimizationPage({ showToast }) {
         <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
           <div className="form-group">
             <label style={styles.label}>Horizon (hours)</label>
-            <input type="number" min="1" max="48" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} />
+            <input type="number" min="1" max="48" value={horizonHours} onChange={e => setHorizonHours(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: horizonHours, change: e => setHorizonHours(e.target.value), label: "horizonHours", manual: false, json: false, sample: 8 }, "p1-1858", undefined)} />
           </div>
           <div className="form-group">
             <label style={styles.label}>Charging Stations</label>
-            <input type="number" min="1" max="50" value={chargingStations} onChange={e => setChargingStations(e.target.value)} />
+            <input type="number" min="1" max="50" value={chargingStations} onChange={e => setChargingStations(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: chargingStations, change: e => setChargingStations(e.target.value), label: "chargingStations", manual: false, json: false, sample: 4 }, "p1-2102", undefined)} />
           </div>
         </div>
 
@@ -72,7 +77,7 @@ function BatteryOptimizationPage({ showToast }) {
             </div>
           )}
           {!result.result && (
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(result, null, 2)}</pre>
+            <FormattedAIReport response={result} />
           )}
         </div>
       )}

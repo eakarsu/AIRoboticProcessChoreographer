@@ -5,16 +5,23 @@ function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [loading, setLoading] = useState(false);
+  const demoCredentialsAvailable = import.meta.env.VITE_ENABLE_DEMO_CREDENTIAL_AUTOFILL === 'true'
+    && Boolean(import.meta.env.VITE_DEMO_EMAIL)
+    && Boolean(import.meta.env.VITE_DEMO_PASSWORD);
 
   const handleAutoFill = () => {
     setEmail(import.meta.env.VITE_DEMO_EMAIL || '');
     setPassword(import.meta.env.VITE_DEMO_PASSWORD || '');
+    setError('');
+    setNotice('Demo credentials filled. Select Sign In to continue.');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setNotice('');
     setLoading(true);
     try {
       const res = await api.post('/auth/login', { email, password });
@@ -68,9 +75,10 @@ function Login({ onLogin }) {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
-          <button type="button" onClick={handleAutoFill} style={styles.autoFillBtn}>
-            Auto Fill Demo Credentials
-          </button>
+          {demoCredentialsAvailable && <button type="button" onClick={handleAutoFill} style={styles.autoFillBtn}>
+            Fill Demo Credentials
+          </button>}
+          {notice && <p role="status" style={styles.notice}>{notice}</p>}
         </form>
 
         <div style={styles.footer}>
@@ -178,6 +186,7 @@ const styles = {
     fontSize: '13px',
     textAlign: 'center',
   },
+  notice: { color: '#bbf7d0', fontSize: '13px', textAlign: 'center', margin: 0 },
   footer: { marginTop: '32px', paddingTop: '20px', borderTop: '1px solid #334155' },
   features: {
     display: 'flex',
