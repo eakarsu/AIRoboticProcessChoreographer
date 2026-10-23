@@ -44,6 +44,7 @@ app.use('/api/maintenance', require('./routes/maintenance'));
 app.use('/api/operators', require('./routes/operators'));
 app.use('/api/shifts', require('./routes/shifts'));
 app.use('/api/custom-views', require('./routes/customViews'));
+app.use('/api/feature-pack', require('./routes/featurePack'));
 
 if (process.env.ENABLE_LEGACY_SCHEMA_BOOTSTRAP === 'true') {
   const pool = require('./db');

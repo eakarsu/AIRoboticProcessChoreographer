@@ -3,10 +3,20 @@ const router = express.Router();
 const pool = require('../db');
 
 // GET /api/tasks
+router.get('/export', async (req, res) => {
+  try {
+    const rows = (await pool.query('SELECT * FROM tasks ORDER BY id ASC')).rows;
+    const { filterRecords, toCSV } = require('../featurePack');
+    const filtered = filterRecords(rows, req.query);
+    if (String(req.query.format||'json').toLowerCase()==='csv') { res.setHeader('Content-Type','text/csv'); res.setHeader('Content-Disposition','attachment; filename="tasks.csv"'); return res.send(toCSV(filtered)); }
+    res.setHeader('Content-Disposition','attachment; filename="tasks.json"'); return res.json({ exportedAt:new Date().toISOString(), count:filtered.length, records:filtered });
+  } catch (err) { console.error('Error exporting tasks:', err); return res.status(500).json({ error: 'Internal server error' }); }
+});
 router.get('/', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM tasks ORDER BY id ASC');
-    res.json(result.rows);
+    const { filterRecords } = require('../featurePack');
+    res.json(filterRecords(result.rows, req.query));
   } catch (err) {
     console.error('Error fetching tasks:', err);
     res.status(500).json({ error: 'Internal server error' });

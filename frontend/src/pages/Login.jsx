@@ -11,26 +11,35 @@ function Login({ onLogin }) {
     && Boolean(import.meta.env.VITE_DEMO_EMAIL)
     && Boolean(import.meta.env.VITE_DEMO_PASSWORD);
 
-  const handleAutoFill = () => {
-    setEmail(import.meta.env.VITE_DEMO_EMAIL || '');
-    setPassword(import.meta.env.VITE_DEMO_PASSWORD || '');
-    setError('');
-    setNotice('Demo credentials filled. Select Sign In to continue.');
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const submitLogin = async (loginEmail, loginPassword) => {
     setError('');
     setNotice('');
     setLoading(true);
     try {
-      const res = await api.post('/auth/login', { email, password });
+      const res = await api.post('/auth/login', { email: loginEmail, password: loginPassword });
       onLogin(res.data.user, res.data.token);
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAutoFill = async () => {
+    const demoEmail = import.meta.env.VITE_DEMO_EMAIL || '';
+    const demoPassword = import.meta.env.VITE_DEMO_PASSWORD || '';
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError('');
+    setNotice('');
+    if (demoEmail && demoPassword) {
+      await submitLogin(demoEmail, demoPassword);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await submitLogin(email, password);
   };
 
   return (

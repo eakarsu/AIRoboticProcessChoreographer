@@ -15,6 +15,7 @@ import DynamicFleetSizingPage from './pages/DynamicFleetSizingPage';
 import ZoneCapacityForecastPage from './pages/ZoneCapacityForecastPage';
 import ChargingOrchestrationPage from './pages/ChargingOrchestrationPage';
 import Sidebar from './components/Sidebar';
+import FeaturePackPanel from './components/FeaturePackPanel.jsx';
 import CustomViewsPage from './pages/CustomViewsPage';
 
 // === Batch 07 Gaps & Frontend Mounts ===
@@ -91,6 +92,7 @@ function App() {
       <main style={{ flex: 1, padding: '32px', marginLeft: '260px', minHeight: '100vh' }}>
         <Routes>
         <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/feature-pack" element={<FeaturePackPanel />} />
         <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
         <Route path="/codex/operations" element={<CodexOperationsFeature />} />
 
